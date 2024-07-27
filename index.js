@@ -69,6 +69,7 @@ async function main() {
     // Handle any EXPRESS error
   } catch (err) {
     if (err instanceof Error) {
+      console.log(process.env.CONNECTION_STRING)
       console.error(
         `[MAIN]: Unexpected error while init project: ${err.message}`
       );
