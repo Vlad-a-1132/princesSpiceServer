@@ -3,7 +3,7 @@ const { ImageUpload } = require("../models/imageUpload");
 
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const multer = require("multer");
@@ -75,7 +75,7 @@ router.post(`/signup`, async (req, res) => {
       res.status(400).json({ error: true, msg: "user already exist!" });
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    // const hashPassword = await bcrypt.hash(password, 10);
 
     const result = await User.create({
       name: name,
@@ -109,7 +109,7 @@ router.post(`/signin`, async (req, res) => {
       res.status(404).json({ error: true, msg: "User not found!" });
     }
 
-    const matchPassword = await bcrypt.compare(password, existingUser.password);
+    // const matchPassword = await bcrypt.compare(password, existingUser.password);
 
     if (!matchPassword) {
       return res.status(400).json({ error: true, msg: "Invailid credentials" });
@@ -149,7 +149,7 @@ router.put(`/changePassword/:id`, async (req, res) => {
     res.status(404).json({ error: true, msg: "User not found!" });
   }
 
-  const matchPassword = await bcrypt.compare(password, existingUser.password);
+  // const matchPassword = await bcrypt.compare(password, existingUser.password);
 
   if (!matchPassword) {
     return res.status(400).send("current password wrong");
@@ -157,7 +157,7 @@ router.put(`/changePassword/:id`, async (req, res) => {
     let newPassword;
 
     if (newPass) {
-      newPassword = bcrypt.hashSync(newPass, 10);
+      // newPassword = bcrypt.hashSync(newPass, 10);
     } else {
       newPassword = existingUser.passwordHash;
     }
@@ -235,7 +235,7 @@ router.put("/:id", async (req, res) => {
   const userExist = await User.findById(req.params.id);
 
   if (req.body.password) {
-    newPassword = bcrypt.hashSync(req.body.password, 10);
+    // newPassword = bcrypt.hashSync(req.body.password, 10);
   } else {
     newPassword = userExist.passwordHash;
   }
