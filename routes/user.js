@@ -75,7 +75,7 @@ router.post(`/signup`, async (req, res) => {
       res.status(400).json({ error: true, msg: "user already exist!" });
     }
 
-    // const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await password;
 
     const result = await User.create({
       name: name,
@@ -109,7 +109,7 @@ router.post(`/signin`, async (req, res) => {
       res.status(404).json({ error: true, msg: "User not found!" });
     }
 
-    // const matchPassword = await bcrypt.compare(password, existingUser.password);
+    const matchPassword = await password;
 
     if (!matchPassword) {
       return res.status(400).json({ error: true, msg: "Invailid credentials" });
@@ -149,7 +149,7 @@ router.put(`/changePassword/:id`, async (req, res) => {
     res.status(404).json({ error: true, msg: "User not found!" });
   }
 
-  // const matchPassword = await bcrypt.compare(password, existingUser.password);
+  const matchPassword = password
 
   if (!matchPassword) {
     return res.status(400).send("current password wrong");
@@ -157,7 +157,7 @@ router.put(`/changePassword/:id`, async (req, res) => {
     let newPassword;
 
     if (newPass) {
-      // newPassword = bcrypt.hashSync(newPass, 10);
+      newPassword = newPass
     } else {
       newPassword = existingUser.passwordHash;
     }
@@ -235,7 +235,7 @@ router.put("/:id", async (req, res) => {
   const userExist = await User.findById(req.params.id);
 
   if (req.body.password) {
-    // newPassword = bcrypt.hashSync(req.body.password, 10);
+    newPassword = req.body.password
   } else {
     newPassword = userExist.passwordHash;
   }
@@ -278,37 +278,37 @@ router.get('/get', async (req, res) => {
   }
 });
 
-// router.put('/:id',async (req, res)=> {
+router.put('/:id',async (req, res)=> {
 
-//     const { name, phone, email, password } = req.body;
+    const { name, phone, email, password } = req.body;
 
-//     const userExist = await User.findById(req.params.id);
+    const userExist = await User.findById(req.params.id);
 
-//     let newPassword
+    let newPassword
 
-//     if(req.body.password) {
-//         newPassword = bcrypt.hashSync(req.body.password, 10)
-//     } else {
-//         newPassword = userExist.passwordHash;
-//     }
+    if(req.body.password) {
+        newPassword = req.body.password
+    } else {
+        newPassword = userExist.passwordHash;
+    }
 
-//     const user = await User.findByIdAndUpdate(
-//         req.params.id,
-//         {
-//             name:name,
-//             phone:phone,
-//             email:email,
-//             password:newPassword,
-//             images: imagesArr,
-//         },
-//         { new: true}
-//     )
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+            name:name,
+            phone:phone,
+            email:email,
+            password:newPassword,
+            images: imagesArr,
+        },
+        { new: true}
+    )
 
-//     if(!user)
-//     return res.status(400).send('the user cannot be Updated!')
+    if(!user)
+    return res.status(400).send('the user cannot be Updated!')
 
-//     res.send(user);
-// })
+    res.send(user);
+})
 
 router.delete("/deleteImage", async (req, res) => {
   const imgUrl = req.query.img;
