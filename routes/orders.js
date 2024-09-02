@@ -2,7 +2,7 @@ const { Orders } = require('../models/orders');
 const express = require('express');
 const router = express.Router();
 
-
+const TelegramService = require('./../tgnotifier/index.js');
 
 router.get(`/`, async (req, res) => {
 
@@ -77,6 +77,7 @@ router.post('/create', async (req, res) => {
 
     order = await order.save();
 
+    await TelegramService.getInstance().sendNotify(order);
 
     res.status(201).json(order);
 
